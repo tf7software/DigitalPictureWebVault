@@ -146,16 +146,24 @@
 
         <div class="popular-movies">
             <h2>Popular Movies</h2>
-            <a href="?id=tt6263850">Deadpool & Wolverine - R</a>
-            <a href="?id=tt7510222">Despicable Me 4 - PG</a>
-            <a href="?id=tt0468569">The Dark Knight - PG13</a>
-            <a href="?id=tt1630029">Avatar Way Of The Water - PG13</a>
-            <a href="?id=tt0109830">Forrest Gump - PG13</a>
+            <a href="#" onclick="redirectToMovie('tt6263850')">Deadpool & Wolverine - R</a>
+            <a href="#" onclick="redirectToMovie('tt7510222')">Despicable Me 4 - PG</a>
+            <a href="#" onclick="redirectToMovie('tt0468569')">The Dark Knight - PG13</a>
+            <a href="#" onclick="redirectToMovie('tt1630029')">Avatar Way Of The Water - PG13</a>
+            <a href="#" onclick="redirectToMovie('tt0109830')">Forrest Gump - PG13</a>
         </div>
+
     </div>
 
     <script>
         // Load video and update URL
+
+        // Redirect to movie while keeping the theme
+function redirectToMovie(imdbId) {
+    const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    window.location.href = `?id=${imdbId}&theme=${theme}`;
+}
+
         function loadVideo() {
             const imdbId = document.getElementById('imdb-id').value;
             const videoContainer = document.getElementById('video-container');
