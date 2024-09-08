@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Picture Web Vault</title>
+    <link rel="icon" href="favicon.png" type="image/png"> <!-- Add favicon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -89,34 +90,72 @@
             background-color: rgba(255, 255, 255, 0); /* Transparent overlay */
             z-index: 1;
         }
+        /* Mobile-friendly styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                margin: 10px auto;
+            }
+            iframe {
+                height: 300px;
+            }
+        }
+        /* Popular Movies Section */
+        .popular-movies {
+            margin-top: 20px;
+        }
+        .popular-movies a {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .popular-movies a:hover {
+            text-decoration: underline;
+        }
+        /* Replace Title with Logo */
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 200px;
+        }
     </style>
 </head>
 <body class="light-mode">
     <div class="theme-switcher" onclick="toggleTheme()">
-        <i id="theme-icon" class="fas fa-moon"></i> <!-- Font Awesome Moon Icon -->
+        <i id="theme-icon" class="fas fa-moon"></i>
     </div>
     <div class="container">
-        <h1>Digital Picture Web Vault</h1>
+        <!-- Replace title with logo -->
+        <img src="logo.png" alt="Digital Picture Web Vault" class="logo">
+        
         <label for="imdb-id">Enter IMDB ID:</label>
         <input type="text" id="imdb-id" placeholder="e.g., tt1234567">
         <button onclick="loadVideo()">Load Video</button>
         
         <div class="video-container" id="video-container">
             <iframe id="video-embed" src="" allowfullscreen></iframe>
-            <div class="overlay" id="overlay"></div> <!-- Overlay for intercepting clicks -->
+            <div class="overlay" id="overlay"></div> 
         </div>
 
         <div class="instructions">
             <h2>How to Find the IMDB ID</h2>
             <p>The IMDB ID is a unique identifier for movies on IMDB. It usually starts with 'tt' followed by a series of numbers. For example, the IMDB ID for the movie 'Inception' is 'tt1375666'.</p>
-            <p>To find the IMDB ID, visit the IMDB website and search for the movie. Look at the URL of the movie's page; it will look something like this: <code>https://www.imdb.com/title/tt1234567/</code>. The part after '/title/' and before the next '/' is the IMDB ID you need.</p>
+            <p>To find the IMDB ID, visit the IMDB website and search for the movie. Look at the URL of the movie's page; it will look something like this: <code>https://www.imdb.com/title/tt1234567/</code>.</p>
         </div>
-            <p>The DPWV saves your DPWV video in the url above, so you can share movies you like!</p>
+
+        <div class="popular-movies">
+            <h2>Popular Movies</h2>
+            <a href="?id=tt1375666">Inception</a>
+            <a href="?id=tt0111161">The Shawshank Redemption</a>
+            <a href="?id=tt0468569">The Dark Knight</a>
+            <a href="?id=tt0137523">Fight Club</a>
+            <a href="?id=tt0109830">Forrest Gump</a>
         </div>
     </div>
 
     <script>
-        // Function to load video and update URL
+        // Load video and update URL
         function loadVideo() {
             const imdbId = document.getElementById('imdb-id').value;
             const videoContainer = document.getElementById('video-container');
@@ -126,18 +165,17 @@
             if (imdbId) {
                 videoEmbed.src = `https://www.2embed.cc/embed/${imdbId}`;
                 videoContainer.style.display = 'block';
-                overlay.style.display = 'none'; // Hide overlay to allow interaction
+                overlay.style.display = 'none';
             } else {
                 videoContainer.style.display = 'none';
-                overlay.style.display = 'block'; // Show overlay if no ID
+                overlay.style.display = 'block';
             }
 
-            // Update URL with IMDB ID and current theme
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             history.replaceState(null, null, `?id=${imdbId}&theme=${theme}`);
         }
 
-        // Function to toggle theme and update URL
+        // Toggle theme and update URL
         function toggleTheme() {
             const body = document.body;
             const themeIcon = document.getElementById('theme-icon');
@@ -154,13 +192,12 @@
                 themeIcon.classList.add('fa-moon');
             }
 
-            // Always update URL with current theme
             const imdbId = document.getElementById('imdb-id').value;
             history.replaceState(null, null, `?id=${imdbId}&theme=${body.classList.contains('dark-mode') ? 'dark' : 'light'}`);
         }
 
-        // Function to apply theme and load video from URL parameters
-        function applySettingsFromURL() {
+        // Apply settings on page load
+        window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const imdbId = params.get('id');
             const theme = params.get('theme');
@@ -174,15 +211,11 @@
 
             if (imdbId) {
                 document.getElementById('imdb-id').value = imdbId;
-                loadVideo(); // Load video based on IMDB ID from URL
+                loadVideo();
             } else {
-                // Update URL to reflect current theme if no IMDB ID
                 history.replaceState(null, null, `?theme=${document.body.classList.contains('dark-mode') ? 'dark' : 'light'}`);
             }
-        }
-
-        // Apply settings on page load
-        window.onload = applySettingsFromURL;
+        };
     </script>
 </body>
 </html>
