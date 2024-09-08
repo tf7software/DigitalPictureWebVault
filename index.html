@@ -125,14 +125,14 @@
                 videoEmbed.src = `https://www.2embed.cc/embed/${imdbId}`;
                 videoContainer.style.display = 'block';
                 overlay.style.display = 'none'; // Hide overlay to allow interaction
-
-                // Update URL with IMDB ID and current theme
-                const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-                history.replaceState(null, null, `?id=${imdbId}&theme=${theme}`);
             } else {
                 videoContainer.style.display = 'none';
                 overlay.style.display = 'block'; // Show overlay if no ID
             }
+
+            // Update URL with IMDB ID and current theme
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            history.replaceState(null, null, `?id=${imdbId}&theme=${theme}`);
         }
 
         // Function to toggle theme and update URL
@@ -152,11 +152,9 @@
                 themeIcon.classList.add('fa-moon');
             }
 
-            // Update URL with current theme
-            const imdbId = new URLSearchParams(window.location.search).get('id');
-            if (imdbId) {
-                history.replaceState(null, null, `?id=${imdbId}&theme=${body.classList.contains('dark-mode') ? 'dark' : 'light'}`);
-            }
+            // Always update URL with current theme
+            const imdbId = document.getElementById('imdb-id').value;
+            history.replaceState(null, null, `?id=${imdbId}&theme=${body.classList.contains('dark-mode') ? 'dark' : 'light'}`);
         }
 
         // Function to apply theme and load video from URL parameters
@@ -175,6 +173,9 @@
             if (imdbId) {
                 document.getElementById('imdb-id').value = imdbId;
                 loadVideo(); // Load video based on IMDB ID from URL
+            } else {
+                // Update URL to reflect current theme if no IMDB ID
+                history.replaceState(null, null, `?theme=${document.body.classList.contains('dark-mode') ? 'dark' : 'light'}`);
             }
         }
 
