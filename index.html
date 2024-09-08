@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Picture Web Vault</title>
-    <link rel="icon" href="favicon.png" type="image/png"> <!-- Add favicon -->
+    <link rel="icon" href="favicon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -62,9 +62,6 @@
             margin-top: 20px;
         }
         .theme-switcher {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             cursor: pointer;
             font-size: 24px;
             color: var(--icon-color);
@@ -99,6 +96,13 @@
             iframe {
                 height: 300px;
             }
+
+            /* Move theme switcher below search bar on mobile */
+            .theme-switcher {
+                position: static;
+                margin-top: 10px;
+                text-align: center;
+            }
         }
         /* Popular Movies Section */
         .popular-movies {
@@ -122,9 +126,6 @@
     </style>
 </head>
 <body class="light-mode">
-    <div class="theme-switcher" onclick="toggleTheme()">
-        <i id="theme-icon" class="fas fa-moon"></i>
-    </div>
     <div class="container">
         <!-- Replace title with logo -->
         <img src="logo.png" alt="Digital Picture Web Vault" class="logo">
@@ -132,6 +133,11 @@
         <label for="imdb-id">Enter IMDB ID:</label>
         <input type="text" id="imdb-id" placeholder="e.g., tt1234567">
         <button onclick="loadVideo()">Load Video</button>
+
+        <!-- Theme switcher toggle below search bar on mobile -->
+        <div class="theme-switcher" onclick="toggleTheme()">
+            <i id="theme-icon" class="fas fa-moon"></i>
+        </div>
         
         <div class="video-container" id="video-container">
             <iframe id="video-embed" src="" allowfullscreen></iframe>
@@ -157,13 +163,6 @@
 
     <script>
         // Load video and update URL
-
-        // Redirect to movie while keeping the theme
-function redirectToMovie(imdbId) {
-    const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    window.location.href = `?id=${imdbId}&theme=${theme}`;
-}
-
         function loadVideo() {
             const imdbId = document.getElementById('imdb-id').value;
             const videoContainer = document.getElementById('video-container');
