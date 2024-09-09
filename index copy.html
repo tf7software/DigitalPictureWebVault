@@ -93,15 +93,14 @@
             text-decoration: underline;
         }
         .theme-switcher {
-        margin-top: 10px; /* Adjust this value if needed to add more space between the buttons */
-        cursor: pointer;
-        font-size: 24px;
-        color: var(--icon-color);
-        transition: color 0.3s;
-        text-align: center;
-        position: relative; /* Ensure it aligns within its container */
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--icon-color);
+            transition: color 0.3s;
         }
-
         .dark-mode {
             --bg-color: #333;
             --text-color: #f5f5f5;
@@ -153,18 +152,17 @@
         }
     </style>
 </head>
-
+<body class="light-mode">
+    <div class="theme-switcher" onclick="toggleTheme()">
+        <i id="theme-icon" class="fas fa-moon"></i>
+    </div>
     <div class="container">
         <img src="logo.png" alt="Digital Picture Web Vault" class="logo">
         <p>A note from DPWV: Sorry about the ads, just keep clicking the video and it will eventually play. DPWV does not operate 2Embed, the company that hosts our videos, and so we can't control the ads. Sorry, and happy streaming!</p>
         <label for="imdb-id">Enter IMDB ID:</label>
         <input type="text" id="imdb-id" placeholder="e.g., tt1234567">
         <button onclick="loadVideo()">Load Video</button>
-        <div class="theme-switcher" onclick="toggleTheme()">
-            <i id="theme-icon" class="fas fa-moon"></i>
-        </div>
-
-        
+        <button class="mobile-theme-toggle" onclick="toggleTheme()">Light Switch</button>
         <div class="video-container" id="video-container">
             <iframe id="video-embed" src="" allowfullscreen></iframe>
             <div class="overlay" id="overlay"></div> 
