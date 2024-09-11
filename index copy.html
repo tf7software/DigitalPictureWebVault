@@ -16,6 +16,7 @@
             transition: background-color 0.3s, color 0.3s;
             background-color: var(--bg-color);
             color: var(--text-color);
+            overflow: hidden; /* Hide scrollbar while login modal is open */
         }
         .container {
             max-width: 800px;
@@ -38,7 +39,7 @@
             margin: 10px auto;
             font-size: 16px;
         }
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -93,13 +94,13 @@
             text-decoration: underline;
         }
         .theme-switcher {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            margin-top: 10px; /* Adjust this value if needed to add more space between the buttons */
             cursor: pointer;
             font-size: 24px;
             color: var(--icon-color);
             transition: color 0.3s;
+            text-align: center;
+            position: relative; /* Ensure it aligns within its container */
         }
         .dark-mode {
             --bg-color: #333;
@@ -150,19 +151,60 @@
                 display: none;
             }
         }
+        /* Login Modal */
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .modal-content .info-message {
+            color: #333;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .modal-content input {
+            margin: 10px 0;
+        }
+        .modal-content button {
+            margin-top: 10px;
+        }
     </style>
 </head>
-<body class="light-mode">
-    <div class="theme-switcher" onclick="toggleTheme()">
-        <i id="theme-icon" class="fas fa-moon"></i>
+<body>
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Login Required</h2>
+            <p class="info-message">Please log in to access the content. Cost: $1. For access, email <a href="mailto:hwarren@psd0620.org">hwarren@psd0620.org</a>.</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="attemptLogin()">Login</button>
+        </div>
     </div>
-    <div class="container">
+
+    <div class="container" id="mainContent" style="display: none;">
         <img src="logo.png" alt="Digital Picture Web Vault" class="logo">
         <p>A note from DPWV: Sorry about the ads, just keep clicking the video and it will eventually play. DPWV does not operate 2Embed, the company that hosts our videos, and so we can't control the ads. Sorry, and happy streaming!</p>
         <label for="imdb-id">Enter IMDB ID:</label>
         <input type="text" id="imdb-id" placeholder="e.g., tt1234567">
         <button onclick="loadVideo()">Load Video</button>
-        <button class="mobile-theme-toggle" onclick="toggleTheme()">Light Switch</button>
+        <div class="theme-switcher" onclick="toggleTheme()">
+            <i id="theme-icon" class="fas fa-moon"></i>
+        </div>
         <div class="video-container" id="video-container">
             <iframe id="video-embed" src="" allowfullscreen></iframe>
             <div class="overlay" id="overlay"></div> 
@@ -183,6 +225,34 @@
     </div>
 
     <script>
+        const validCredentials = {
+            'user1': 'password1',
+            'user2': 'password2'
+        };
+
+        function attemptLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (validCredentials[username] === password) {
+                localStorage.setItem('loggedIn', 'true');
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.body.style.overflow = 'auto'; // Show scrollbar after login
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        function checkLogin() {
+            if (localStorage.getItem('loggedIn') !== 'true') {
+                document.getElementById('loginModal').style.display = 'flex';
+            } else {
+                document.getElementById('mainContent').style.display = 'block';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
         function redirectToMovie(imdbId) {
             const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
             window.location.href = `?id=${imdbId}&theme=${theme}`;
@@ -228,6 +298,8 @@
         }
 
         window.onload = function() {
+            checkLogin();
+
             const params = new URLSearchParams(window.location.search);
             const imdbId = params.get('id');
             const theme = params.get('theme');
