@@ -1,0 +1,22 @@
+how to use 2embed.cc api for movies and series
+///////////////////////////////////////////////
+
+1 - create TMDB free account and get the api key from there
+2 - paste your TMDB api key in the "api-key.php" file
+3 - now upload all files to your website root directory or sub-directory eg: /api/
+4 - now access movie.php and tv.php on your browser to get the latest JSON data
+
+===========================================================================
+
+pages access example
+
+for movie => https://yoursite.com/api/movie.php?page=1
+for tv => https://yoursite.com/api/tv.php?page=1
+
+now change the page numbers eg: page=1, page=2, page=10, page=50 to get the complete data for movies and series
+
+===========================================================================
+
+join our telegram support group for more details at 
+
+https://t.me/+d4S4kuaPN1g5Mjc9
